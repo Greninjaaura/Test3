@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.2/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+
+    .new-code-icon {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      width: 30px;
+      height: 30px;
+      border: 1px solid #000;
+      border-radius: 50%;
+      color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .code-button {
+      display: inline-block;
+      padding: 5px 10px;
+      background-color: #808080;
+      border: 1px solid #000;
+      border-radius: 5px;
+      cursor: pointer;
+      font-family: monospace;
+      font-size: 15px;
+      color: #FFFFFF;
+      position: fixed;
+      top: 10px;
+      right: 10px;
+    }
+
+    .search-container {
+      position: relative;
+      margin: 20px;
+      display: inline-block;
+    }
+
+    input {
+      padding: 10px 40px 10px 10px;
+      border: none;
+      border-radius: 25px;
+      outline: none;
+      font-size: 16px;
+    }
+
+    button {
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      color: #555;
+    }
+
+    #search-results {
+      margin-top: 20px;
+    }
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 75%;
+      height: 145%;
+      max-width: 80%;
+      max-height: 60vh;
+      background: rgba(255, 255, 255, 0.9);
+      border: 2px solid #808080;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .modal-content {
+      background-color: #fff;
+      padding: 15px;
+      border-radius: 5px;
+      position: relative;
+      animation: fadeIn 0.3s ease;
+      width: 100%;
+      height: 100%;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      text-align: center;
+      font-size: 15px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 10px;
+    }
+
+    .close-button {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    /* Example of fadeIn animation */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+  </style>
+
+  <script>
+    const Data = [
+      { title: "Lorem Ipsum", content: "Lorem ipsum dolor sit amet..." },
+      { title: "Sample Result", content: "This is a sample result." },
+      { title: "Another Result", content: "Here's another matching result." },
+    ];
+
+    function search() {
+      var searchTerm = document.getElementById("search-input").value.toLowerCase();
+      var searchResults = performSearch(searchTerm);
+      displayResults(searchResults);
+    }
+
+    function performSearch(term) {
+      var titleResults = Data.filter(result => result.title.toLowerCase().includes(term));
+
+      if (titleResults.length === 0) {
+        return Data.filter(result => result.content.toLowerCase().includes(term));
+      }
+
+      return titleResults;
+    }
+
+    function displayResults(results) {
+      var resultsContainer = document.getElementById("search-results");
+      resultsContainer.innerHTML = "";
+
+      if (results.length === 0) {
+        if (Data.length === 0) {
+          resultsContainer.innerHTML = "No data available.";
+        } else {
+          resultsContainer.innerHTML = "No results found.";
+        }
+      } else {
+        results.forEach(result => {
+          var resultElement = document.createElement("div");
+          resultElement.innerHTML = `<strong>${result.title}</strong><br>${result.content}`;
+          resultsContainer.appendChild(resultElement);
+        });
+      }
+    }
+
+    function openModal() {
+      var modal = document.getElementById("modal");
+      modal.style.display = "flex";
+      modal.querySelector('.modal-content').focus();
+    }
+
+    function closeModal(event) {
+      if (event.target.classList.contains('close-button')) {
+        document.getElementById("modal").style.display = "none";
+      }
+    }
+  </script>
+</head>
+
+<body>
+  <!-- New code icon -->
+  <div class="new-code-icon">&#60;/&#62;</div>
+
+  <!-- Button with the code icon to open the modal -->
+  <button class="code-button" onclick="openModal()"><i class="fa fa-info-circle"></i></button>
+
+  <h2 style="margin-top: 50px;">Welcome!</h2>
+  <h2>Start learning coding from</h2>
+  <h1><code>&lt;/&gt;</code>CODE</h1>
+
+  <!-- Search bar and related elements -->
+  <div class="search-container">
+    <input type="text" id="search-input" placeholder="Search...">
+    <button onclick="search()"><i class="fas fa-search"></i></button>
+  </div>
+
+  <div id="search-results"></div>
+
+  <!-- Modal overlay and content -->
+  <div id="modal" class="modal-overlay" onclick="closeModal(event)">
+    <div class="modal-content">
+      <span class="close-button" onclick="closeModal(event)">X</span>
+      <div class="modal-header">
+        <h2><img class="news-icon" src="news.png" alt="News Icon">News</h2>
+      </div>
+      <p>Latest updates are <br>1) set up of modal is completed</p>
+    </div>
+  </div>
+</body>
+</html>
